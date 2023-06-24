@@ -6,7 +6,7 @@ RM := rm
 VirtualMachine := qemu-system-i386
 CFlag := -x c -funsigned-char -nostdinc -O0 -Wall -Werror -Wextra -Wfatal-errors -fno-builtin -m32 \
 	-Wstrict-prototypes -Wmissing-prototypes -Wnested-extern -Wconversion
-AssemblerFlag := -f bin -O0 -Werror
+AssemblerFlag := -f bin -O0 -Werror -i src
 LinkerFlag := -flinker-output=exec -nostartfiles -nodefaultlibs -nolibc -nostdlib -m32 \
 	-Map symbols.map -fatal-warnings -no-undefined
 DDFlag := bs=512 conv=notrunc
