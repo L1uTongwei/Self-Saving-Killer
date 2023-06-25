@@ -2,7 +2,6 @@
 ; 加载主程序
 [bits 16]
 org 0x7e00 ; Bootloader 加载地址 0x7e00 - 0x7f00
-%include 'tools/tools.asm'
 
 pgdt dw 0 
     dd GDT_START_ADDRESS
@@ -72,10 +71,14 @@ jmp dword CODE_SELECTOR:protect_mode
 [bits 32]
 protect_mode:
     mov eax, DATA_SELECTOR
-    mov DRAM, eax
+    mov ds, eax
     mov eax, STACK_SELECTOR
-    mov SRAM, eax
+    mov ss, eax
     mov esp, 0x7c00
     mov eax, VIDEO_SELECTOR
-    mov VRAM, eax
-    %include 'main.asm'
+    mov es, eax
+    jmp main
+    jmp $
+
+%include 'main.asm'
+%include 'tools/tools.asm'
