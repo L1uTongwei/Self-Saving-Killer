@@ -1,3 +1,4 @@
-Sectors     Resources
-   1        MBR Loader
-   2        Bootloader
+Sectors     Resources       Memory
+   0        MBR Loader     
+   1        Bootloader      
+   2        Main Program
