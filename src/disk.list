@@ -1,4 +1,4 @@
-Sectors     Resources       Memory
+Sectors     Resourcess
    0        MBR Loader     
    1        Bootloader      
-   2        Main Program
+2 ~ 1541     Menu 1

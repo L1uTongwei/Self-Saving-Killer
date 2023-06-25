@@ -8,6 +8,7 @@ DDFlag := bs=512 conv=notrunc,sync
 VMFlag := -hda dist/Self-Saving-Killer.img -serial null -parallel stdio
 .PHONY: init clear build run
 build: init mbr bootloader
+	$(DD) if=assets/menu.bmp of=dist/Self-Saving-Killer.img $(DDFlag) count=1539 seek=2
 run:
 	$(VirtualMachine) $(VMFlag)
 debug:
