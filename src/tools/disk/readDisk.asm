@@ -1,6 +1,6 @@
 ; 从硬盘读取一个逻辑扇区
 ; 参数列表
-; ax = 逻辑扇区号 0~15 位
+; eax 起始扇区
 ; DRAM:ebx = 读取出的数据放入地址
 ; 返回 ebx = ebx + 512            
 
@@ -12,12 +12,14 @@ mov al, ah
 out dx, al    ; LBA地址15~8
 
 mov dx, 0x1f5 ; 0x1f5
-mov al, 0x00
+shr eax, 16
 out dx, al    ; LBA地址23~16
 
 mov dx, 0x1f6 ; 0x1f6
-mov al, 0xe0  ; LBA地址27~24
-out dx, al
+and ah, 0x0f
+or ah, 0xe0
+mov al, ah  
+out dx, al    ; LBA地址27~24
 
 mov dx, 0x1f2
 mov al, 0x01

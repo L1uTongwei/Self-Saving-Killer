@@ -9,3 +9,4 @@ mov al, 35
 out dx, al
 mov al, 0
 out dx, al
+jmp $
