@@ -6,8 +6,4 @@ jmp tools_asm_end
 %define SRAM ss ; 栈地址寄存器
 %define VRAM es ; 显存
 
-%include 'tools/draw.asm'
-%include 'tools/disk.asm'
-%include 'tools/color.asm'
-
 tools_asm_end:

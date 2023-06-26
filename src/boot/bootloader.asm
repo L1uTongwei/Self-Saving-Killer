@@ -30,7 +30,7 @@ mov dword [GDT_START_ADDRESS + 0x08], 0x0000ffff    ; 基地址为0，段界限�
 mov dword [GDT_START_ADDRESS + 0x0c], 0x00cf9200    ; 粒度为4KB，存储器段描述符 
     
 ; 建立保护模式下的堆栈段描述符       
-mov dword [GDT_START_ADDRESS + 0x10], 0x00000000    ; 基地址为0x00000000，界限0x0
+mov dword [GDT_START_ADDRESS + 0x10], 0x00000000    ; 基地址为0x00000000，界限0xFFFFF
 mov dword [GDT_START_ADDRESS + 0x14], 0x00409600    ; 粒度为1个字节
     
 ; 建立保护模式下的显存描述符
@@ -78,7 +78,5 @@ protect_mode:
     mov eax, VIDEO_SELECTOR
     mov es, eax
     jmp main
-    jmp $
 
 %include 'main.asm'
-%include 'tools/tools.asm'
