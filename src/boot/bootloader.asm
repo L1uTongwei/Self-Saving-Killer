@@ -16,7 +16,7 @@ mov es, ax
 mov di, 0
 mov ax, 0x4f01
 mov cx, 0x101
-int 0x10
+int 10h
 mov ebx, [es:40]
 
 GDT_START_ADDRESS equ 0x8800 ; GDT 表地址
@@ -74,9 +74,6 @@ protect_mode:
     mov ds, eax
     mov eax, STACK_SELECTOR
     mov ss, eax
-    mov esp, 0x7c00
     mov eax, VIDEO_SELECTOR
     mov es, eax
-    jmp main
-
-%include 'main.asm'
+    %include 'main.asm'

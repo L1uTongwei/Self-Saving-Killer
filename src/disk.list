@@ -1,5 +1,0 @@
-Sectors     Resourcess
-   0        MBR Loader     
-   1        Bootloader     
- 2 ~ 1540   Menu Bitmap (1024 x 768)
-1542 ~ 1549 ASCII Fonts

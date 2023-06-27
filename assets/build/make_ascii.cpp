@@ -489,7 +489,9 @@ int main(){
     FILE* fp = fopen("assets/ascii.font", "wb");
     for(int i = 0x00; i <= 0x7f; i++){
         if(i < 0x20) fwrite(nochar, 1, 32, fp);
-        else fwrite(font[i].data, 1, 32, fp);
+        else{
+            fwrite(font[i - 0x20].data, 1, 32, fp);
+        }
     }
     fclose(fp);
     return 0;
