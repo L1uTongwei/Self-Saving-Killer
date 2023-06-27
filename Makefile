@@ -15,8 +15,6 @@ build: init
 	$(Assembler) $(AssemblerFlag) src/boot/bootloader.asm -o object/bootloader.bin
 	$(DD) if=object/bootloader.bin of=dist/Self-Saving-Killer.img $(DDFlag) count=1 seek=1
 	$(DD) if=assets/menu.bmp of=dist/Self-Saving-Killer.img bs=1 conv=notrunc count=787456 seek=1024 skip=54
-	$(Compiler) assets/build/make_ascii.cpp -o object/make_ascii.exe
-	$(DD) if=assets/ascii.font of=dist/Self-Saving-Killer.img $(DDFlag) count=8 seek=1542
 run:
 	$(VirtualMachine) $(VMFlag)
 init:

@@ -8,7 +8,6 @@ main:
     push dword 0x100000 ; 写入地址
     push dword 2 ; 起始扇区
     %include 'tools/disk/readData.asm'
-    push dword 0x00 ; 起始位置
     push word 768 ; 列数
     push word 1024 ; 行数
     push dword 0x100000 ; 地址
