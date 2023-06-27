@@ -1,6 +1,7 @@
 ; bootloader.asm
 ; 加载主程序
 [bits 16]
+%include 'tools/tools.asm'
 org 0x7e00 ; Bootloader 加载地址 0x7e00 - 0x7f00
 
 pgdt dw 0 

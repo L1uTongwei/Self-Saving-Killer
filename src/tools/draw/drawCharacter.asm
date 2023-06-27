@@ -1,37 +1,94 @@
-; 在指定位置绘制一个字符
-; 栈参数：字库编码（dword） 字符地址（dword） 字符宽度（word） 指定位置 X（word） 指定位置 Y（word） 颜色（word）
-drawCharacter:
-    pop eax ; 字符编码
-    pop esi ; 字库地址
-    add esi, eax ; 计算字体地址
-    pop bx ; 字符宽度
-    _startx dw 0
-    pop word [_startx]
-    _starty dw 0
-    pop word [_starty]
-    _color dw 0
-    pop word [_color]  ; 颜色
-    mov eax, 0
-    _loopRows:
-        mov ebx, [_starty]
-        imul ebx, 1024
-        add ebx, [_startx]
-        add ebx, ecx
-        mov cl, 0
-        mov bx, word [RAM:esi]
-        _loopColumn:
-            mov di, bx
-            shr di, cl
-            and di, 0x01
-            test di, 0x01
-            jz _cloop
-            mov ch, byte [_color + 1]
-            mov [VRAM:ebx], ch
-        _cloop:
-            inc ebx
-            cmp cl, 16
-        jl _loopColumn
-        inc esi
-    cmp eax, 16
-    jl _loopRows
-ret
+; 在指定位置绘制一个可控颜色图块
+; 栈参数：地址（dword）长度（word）高度（word）起始位置 X（word）起始位置 Y（word）颜色（word）
+pop eax ; 地址
+pop bx ; 长度
+pop cx ; 高度
+.startx dw 0
+pop word [.startx]
+.starty dw 0 
+pop word [.starty]
+.endX dw 0
+push word [.startx]
+pop word [.endX]
+add word [.endX], bx
+mov si, [.starty] ; Y 坐标初始值
+pop bx ; 颜色
+.loop2.loop1:
+    mov di, [.startx] ; X 坐标初始值
+    .loop2:
+        mov edx, esi
+        imul edx, 1024
+        add edx, edi
+
+        test byte [eax], 0b00000001
+        jmp .fill1
+        .callback1:
+
+        test byte [eax], 0b00000010
+        jmp .fill2
+        .callback2:
+
+        test byte [eax], 0b0000100
+        jmp .fill3
+        .callback3:
+
+        test byte [eax], 0b00001000
+        jmp .fill4
+        .callback4:
+
+        test byte [eax], 0b00010000
+        jmp .fill5
+        .callback5:
+
+        test byte [eax], 0b00100000
+        jmp .fill6
+        .callback6:
+
+        test byte [eax], 0b01000000
+        jmp .fill7
+        .callback7:
+
+        test byte [eax], 0b10000000
+        jmp .fill8
+        .callback8:
+        
+        add di, 8
+        cmp di, word [endX]
+        jle .loop2
+    inc si
+loop .loop2.loop1
+jmp .end
+
+.fill1:
+mov byte [VRAM:edx], bx
+jmp .callback1
+
+.fill2:
+mov byte [VRAM:edx + 1], bx
+jmp .callback2
+
+.fill3:
+mov byte [VRAM:edx + 2], bx
+jmp .callback3
+
+.fill4:
+mov byte [VRAM:edx + 3], bx
+jmp .callback4
+
+.fill5:
+mov byte [VRAM:edx + 4], bx
+jmp .callback5
+
+.fill6:
+mov byte [VRAM:edx + 5], bx
+jmp .callback6
+
+.fill7:
+mov byte [VRAM:edx + 6], bx
+jmp .callback7
+
+.fill8:
+mov byte [VRAM:edx + 7], bx
+jmp .callback8
+
+.end:

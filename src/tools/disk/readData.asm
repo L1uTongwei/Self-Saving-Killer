@@ -4,7 +4,7 @@
 pop edi ; 保存起始扇区
 pop ebx ; 保存写入地址
 pop esi ; 保存扇区数量
-.loop:
+readDisk.loop:
     mov eax, edi
     %include 'tools/disk/readDisk.asm'
     inc edi
