@@ -1,8 +1,11 @@
 ; main.asm
 ; 主程序
-%include 'tools/tools.asm'
+; Bootloader 起始扇区
+%define Bootloader_Sector 1
+; Bootloader 长度
+%define Bootloader_Length 2
 main:
-    ; 加载 assets/menu.bmp
+    ; 加载 assets/menu.bmp （背景页位图）
     ; 0x100000 - 0x1C0400
     push dword 1538 ; 扇区数量 1538
     push dword 0x100000 ; 写入地址

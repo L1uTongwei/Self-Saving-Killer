@@ -1,9 +1,17 @@
 ; tools.asm
 ; 工具类包含文件
-jmp tools_asm_end
 
-%define DRAM ds ; 数据地址寄存器
-%define SRAM ss ; 栈地址寄存器
-%define VRAM es ; 显存
+; 数据地址寄存器
+%define RAM ds
+; 显存
+%define VRAM gs 
 
-tools_asm_end:
+%include 'tools/color/debugColor.asm'
+%include 'tools/color/setColor.asm'
+%include 'tools/disk/readData.asm'
+%include 'tools/disk/readDisk.asm'
+%include 'tools/draw/covertXY.asm'
+%include 'tools/draw/drawBitmap.asm'
+%include 'tools/draw/drawCharacter.asm'
+%include 'tools/draw/readPixel.asm'
+%include 'tools/draw/writePixel.asm'
