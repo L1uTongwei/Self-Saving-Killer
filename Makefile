@@ -4,7 +4,7 @@ Objcopy := objcopy
 DD := dd
 RM := rm
 VirtualMachine := qemu-system-i386
-AssemblerFlag := -f bin -O0 -Werror -i src
+AssemblerFlag := -f bin -O0 -i src
 DDFlag := bs=512 conv=notrunc,sync
 VMFlag := -hda dist/Self-Saving-Killer.img -serial null -parallel stdio
 .PHONY: init clear build run

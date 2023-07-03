@@ -1,5 +1,5 @@
 ; 显示图块到指定位置
-; 栈参数：地址（dword）长度（word）高度（word）起始位置 X（word）起始位置 Y（word）
+; 栈参数：地址（dword）
 drawBitmap:
     pop eax ; 取地址
     ; 读取调色板
@@ -23,37 +23,26 @@ drawBitmap:
         mov al, bl
         div cl
         out dx, al
-
         inc esi
         add eax, 4
         cmp esi, 255 ; 读取 256 种颜色
     jle drawBitmap.loop1
     ; 写入数据
-    pop bx ; 长度
-    pop cx ; 高度
-    drawBitmap.startx dw 0
-    pop word [drawBitmap.startx]
-    sub [drawBitmap.startx], word 1
-    drawBitmap.starty dw 0 
-    pop word [drawBitmap.starty]
-    sub [drawBitmap.startx], word 1
-    drawBitmap.endX dw 0
-    push word [drawBitmap.startx]
-    pop word [drawBitmap.endX]
-    add word [drawBitmap.endX], bx
-    mov si, cx ; Y 坐标初始值
-    add si, [drawBitmap.starty]
+    mov esi, 768 - 1
+    mov ecx, 0
     drawBitmap.loop2:
-        mov di, [drawBitmap.startx] ; X 坐标初始值
+        mov edi, 0
         drawBitmap.loop3:
             mov edx, esi
             imul edx, 1024
             add edx, edi
-            mov bl, [RAM:eax]
-            mov [VRAM:edx], bl
-            add di, 8
-            cmp di, word [drawBitmap.endX]
+            mov bl, [RAM:eax + edx]
+            mov [VRAM:ecx], bl
+            inc ecx
+            inc edi
+            cmp edi, 1024 - 1
             jle drawBitmap.loop3
-        sub si, 1
-        cmp si, [drawBitmap.starty]
+        sub esi, 1
+        cmp esi, 0
     jge drawBitmap.loop2
+ret

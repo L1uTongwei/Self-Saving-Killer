@@ -115,14 +115,17 @@ protect_mode:
             and al, 0x88
             cmp al, 0x08
         jnz .waits
+
         ; 读取512字节到地址RAM:ebx
         mov cx, 256    ; 每次读取一个字，2个字节，因此读取256次即可           
         mov dx, 0x1f0
+
         .readw:
             in ax, dx
             mov [RAM:ebx], ax
             add ebx, 2
         loop .readw
+        
         inc edi
         cmp edi, esi
     jle readLoop
