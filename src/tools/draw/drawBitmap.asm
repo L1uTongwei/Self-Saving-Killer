@@ -1,49 +1,54 @@
-; 显示图块到指定位置
+; 写入位图文件
 ; 栈参数：地址（dword）
 drawBitmap:
-    pop esi ; 取地址
+    pop edi ; 取地址
     ; 读取调色板
+    mov esi, 0
     mov ax, 0
     mov cl, 4
-    drawBitmap.loop1:
+    _loop2:
         ; 写入颜色（B G R A）
         mov ax, si
         mov dx, 0x3c8
         out dx, al
-
-        mov bx, [RAM:esi + 2]
+        
+        mov bx, [RAM:edi + 2]
         mov dx, 0x3c9
-        mov al, bh
+        mov al, bh ; R (bl)
         div cl
         out dx, al
 
-        mov bx, [RAM:esi]
-        mov al, bh
+        mov bx, [RAM:edi]
+        mov al, bh ; G
         div cl
         out dx, al
 
-        mov al, bl
+        mov al, bl ; B
         div cl
         out dx, al
 
         inc esi
-        add eax, 4
+        add edi, 4
         cmp esi, 255 ; 读取 256 种颜色
-    jle drawBitmap.loop1
-    ; 写入数据
-    mov edx, 1024 * (768 - 1)
-    drawBitmap.loop2:
-        mov edi, 0
-        drawBitmap.loop3:
-            mov bl, [RAM:esi]
-            mov [VRAM:edx], bl
-            inc esi
-            inc edx
+    jle _loop2
+    ; 写入屏幕
+    mov ecx, 768 - 1
+    _loop3:
+        ; 外层循环 eax += 行数 * 列数（显存）
+        ; 同时初始化 ebx = 0 （列扫描线）
+        mov eax, ecx
+        imul eax, 1024
+        mov ebx, 0
+        __loop3:
+            ; 内层循环 ebx: 0 ~ 文件行数
+            ; 同时增加显存
+            mov dl, byte [RAM:edi]
+            mov [VRAM:eax], byte dl
+            inc eax
+            inc ebx
             inc edi
-            cmp edi, 1024
-            jl drawBitmap.loop3
-        sub edx, 1024 * 2
-        cmp edx, 0
-    jg drawBitmap.loop2
+            cmp ebx, 1024
+        jl __loop3
+    loop _loop3
     jmp $
 ret
