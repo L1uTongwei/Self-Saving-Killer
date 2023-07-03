@@ -17,7 +17,7 @@ build: init
 	$(DD) if=object/bootloader.bin of=dist/Self-Saving-Killer.img $(DDFlag) count=1 seek=1
 	$(DD) if=object/main.bin of=dist/Self-Saving-Killer.img $(DDFlag) count=1 seek=2
 	$(DD) if=assets/ascii.font of=dist/Self-Saving-Killer.img $(DDFlag) count=8 seek=3
-	$(DD) if=assets/menu.bmp of=dist/Self-Saving-Killer.img bs=1 conv=notrunc count=787456 seek=10752 skip=54
+	tail -c +55 assets/menu.bmp | $(DD) of=dist/Self-Saving-Killer.img $(DDFlag) count=1538 seek=11
 run:
 	$(VirtualMachine) $(VMFlag)
 init:
