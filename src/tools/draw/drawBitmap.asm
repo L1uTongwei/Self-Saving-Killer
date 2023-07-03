@@ -1,7 +1,7 @@
 ; 写入位图文件
 ; 栈参数：地址（dword）
 drawBitmap:
-    pop edi ; 取地址
+    mov edi, [ESP + 4] ; 取地址
     ; 读取调色板
     mov esi, 0
     mov ax, 0
@@ -50,5 +50,6 @@ drawBitmap:
             cmp ebx, 1024
         jl __loop3
     loop _loop3
-    jmp $
-ret
+    pop eax
+    pop edi
+jmp dword eax
