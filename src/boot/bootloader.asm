@@ -127,4 +127,4 @@ protect_mode:
         cmp edi, esi
     jle readLoop
     ; 执行主程序
-    jmp [RAM:CODE_BEGIN]
+    jmp dword CODE_SELECTOR:CODE_BEGIN

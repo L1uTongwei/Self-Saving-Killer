@@ -57,4 +57,3 @@ drawBitmap:
         sub si, 1
         cmp si, [drawBitmap.starty]
     jge drawBitmap.loop2
-ret
