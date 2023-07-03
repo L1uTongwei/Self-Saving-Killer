@@ -7,3 +7,4 @@
 %define VRAM gs 
 
 TOTAL_SECTORS equ 1547 ; ROM 扇区数
+CODE_BEGIN equ 0x00100000

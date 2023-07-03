@@ -78,14 +78,53 @@ protect_mode:
     mov eax, VIDEO_SELECTOR
     mov es, eax
     ; 接下来加载 ROM 到内存
-    mov ebx, 0x00010000 ; ROM 起始地址
+    mov ebx, CODE_BEGIN ; ROM 起始地址
     mov edi, 2 ; 从第 2 个扇区开始
     mov esi, TOTAL_SECTORS ; ROM 扇区数目
     readLoop:
-        mov eax, edi
-        %include 'tools/disk/readDisk.asm'
+        mov eax, edi      
+        mov dx, 0x1f3 ; 0x1f3
+        out dx, al    ; LBA地址7~0
+
+        mov dx, 0x1f4 ; 0x1f4
+        shr eax, 8
+        out dx, al    ; LBA地址15~8
+
+        mov dx, 0x1f5 ; 0x1f5
+        shr eax, 8
+        out dx, al    ; LBA地址23~16
+
+        mov dx, 0x1f6 ; 0x1f6
+        shr eax, 8
+        and al, 0x0f
+        or al, 0xe0
+        out dx, al    ; LBA地址27~24
+
+        mov dx, 0x1f2
+        mov al, 0x01
+        out dx, al    ; 读取1个扇区
+
+        mov dx, 0x1f7 ; 0x1f7
+        mov al, 0x20  ; 读命令
+        out dx, al
+
+        ; 等待处理其他操作
+        .waits:
+            nop
+            in  al, dx
+            and al, 0x88
+            cmp al, 0x08
+        jnz .waits
+        ; 读取512字节到地址RAM:ebx
+        mov cx, 256    ; 每次读取一个字，2个字节，因此读取256次即可           
+        mov dx, 0x1f0
+        .readw:
+            in ax, dx
+            mov [RAM:ebx], ax
+            add ebx, 2
+        loop .readw
         inc edi
         cmp edi, esi
     jle readLoop
     ; 执行主程序
-    jmp [RAM:0x00010000]
+    jmp [RAM:CODE_BEGIN]
