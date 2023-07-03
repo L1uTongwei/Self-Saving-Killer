@@ -4,7 +4,7 @@
 ; 数据地址寄存器
 %define RAM ds
 ; 显存
-%define VRAM gs 
+%define VRAM es 
 
 TOTAL_SECTORS equ 1547 ; ROM 扇区数
 CODE_BEGIN equ 0x00100000
