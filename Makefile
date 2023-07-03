@@ -13,8 +13,11 @@ build: init
 	$(Assembler) $(AssemblerFlag) src/boot/mbr.asm -o object/mbr.bin
 	$(DD) if=object/mbr.bin of=dist/Self-Saving-Killer.img $(DDFlag) count=1 seek=0
 	$(Assembler) $(AssemblerFlag) src/boot/bootloader.asm -o object/bootloader.bin
+	$(Assembler) $(AssemblerFlag) src/main.asm -o object/main.bin
 	$(DD) if=object/bootloader.bin of=dist/Self-Saving-Killer.img $(DDFlag) count=1 seek=1
-	$(DD) if=assets/menu.bmp of=dist/Self-Saving-Killer.img bs=1 conv=notrunc count=787456 seek=1024 skip=54
+	$(DD) if=object/main.bin of=dist/Self-Saving-Killer.img $(DDFlag) count=1 seek=2
+	$(DD) if=assets/ascii.font of=dist/Self-Saving-Killer.img $(DDFlag) count=8 seek=3
+	$(DD) if=assets/menu.bmp of=dist/Self-Saving-Killer.img bs=1 conv=notrunc count=787456 seek=10752 skip=54
 run:
 	$(VirtualMachine) $(VMFlag)
 init:

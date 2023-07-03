@@ -1,20 +1,21 @@
 ; main.asm
 ; 主程序
-; Bootloader 起始扇区
-%define Bootloader_Sector 1
-; Bootloader 长度
-%define Bootloader_Length 2
+%include 'tools/tools.asm'
+CODE_BEGIN equ 0x00010000
+CODE_OFFSET equ 0x200
+ASCII_BEGIN equ CODE_BEGIN + CODE_OFFSET
+ASCII_OFFSET equ 0x1000
+MENU_BEGIN equ ASCII_BEGIN + ASCII_OFFSET
+MENU_OFFSET equ 0xC0400
 main:
+    jmp $
     ; 加载 assets/menu.bmp （背景页位图）
-    ; 0x100000 - 0x1C0400
-    push dword 1538 ; 扇区数量 1538
-    push dword 0x100000 ; 写入地址
-    push dword 2 ; 起始扇区
-    %include 'tools/disk/readData.asm'
     push word 0 ; 起始位置 Y
     push word 0 ; 起始位置 X
     push word 768 ; 列数
     push word 1024 ; 行数
-    push dword 0x100000 ; 地址
-    %include 'tools/draw/drawBitmap.asm'
+    push dword MENU_BEGIN ; 地址
+    ;call drawBitmap
 jmp $
+
+;%include 'tools/draw/drawBitmap.asm'

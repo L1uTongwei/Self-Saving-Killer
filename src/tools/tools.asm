@@ -5,3 +5,5 @@
 %define RAM ds
 ; 显存
 %define VRAM gs 
+
+TOTAL_SECTORS equ 1547 ; ROM 扇区数

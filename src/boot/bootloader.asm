@@ -77,4 +77,15 @@ protect_mode:
     mov ss, eax
     mov eax, VIDEO_SELECTOR
     mov es, eax
-    %include 'main.asm'
+    ; 接下来加载 ROM 到内存
+    mov ebx, 0x00010000 ; ROM 起始地址
+    mov edi, 2 ; 从第 2 个扇区开始
+    mov esi, TOTAL_SECTORS ; ROM 扇区数目
+    readLoop:
+        mov eax, edi
+        %include 'tools/disk/readDisk.asm'
+        inc edi
+        cmp edi, esi
+    jle readLoop
+    ; 执行主程序
+    jmp [RAM:0x00010000]

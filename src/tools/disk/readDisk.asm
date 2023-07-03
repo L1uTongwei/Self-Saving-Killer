@@ -46,4 +46,3 @@ readDisk:
         mov [RAM:ebx], ax
         add ebx, 2
     loop .readw
-ret
