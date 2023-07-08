@@ -30,3 +30,4 @@ clean:
 	-rm -rf object
 	-rm -rf dist
 	-rm -rf target
+onekey: build install run
