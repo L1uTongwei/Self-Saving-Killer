@@ -30,4 +30,5 @@ typedef struct{
 void __main(unsigned long magic, unsigned long addr){
     multiboot_info_t *mbi;
     mbi = (multiboot_info_t*)addr;
+    
 }
