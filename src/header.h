@@ -1,4 +1,6 @@
 #pragma once
+#define nullptr (void*) 0
+#define byte unsigned char
 
 inline short portIn(short addr){
     short ret;
