@@ -1,24 +1,13 @@
 #include "header.h"
 #include "memory_pool.h"
-#include "drives.h"
+#include "ASCII_font.h"
+#include "simple_print.h"
 extern void entry();
 typedef struct{
-    unsigned long tabsize;
-    unsigned long strsize;
-    unsigned long addr;
-    unsigned long reserved;
-}aout_symbol_table_t;
-typedef struct{
-    unsigned long num;
-    unsigned long size;
-    unsigned long addr;
-    unsigned long shndx;
-}elf_section_header_table_t;
-typedef struct{
-    unsigned long size; //结构大小
-    unsigned long base_addr; //基地址
-    unsigned long length; //地址长度
-    unsigned long type; 
+    uint32_t size; //结构大小
+    uint64_t base_addr; //基地址
+    uint64_t length; //地址长度
+    uint32_t type; 
     /*
         值 1 表示可用 RAM
         值 3 表示保存ACPI信息的可用存储器
@@ -27,45 +16,46 @@ typedef struct{
     */
 }mmap;
 typedef struct{
-    unsigned short red;
-    unsigned short yellow;
-    unsigned short blue;
-}color;
-typedef struct{
-    unsigned long flags;
-    unsigned long mem_lower; //低位内存（640KB）
-    unsigned long mem_upper; //高位内存（从 1MB 位置开始，最大 1MB）
-    unsigned long boot_device; //启动设备编号（从 CD 启动无法使用此字段）
-    unsigned long cmdline; //启动命令行地址
-    unsigned long mods_count; 
-    unsigned long mods_addr;
-    union{
-        aout_symbol_table_t aout_sym;
-        elf_section_header_table_t elf_sec;
-    }u;
-    unsigned long mmap_length; //mmap长度
-    unsigned long mmap_addr; //mmap结构地址
-    unsigned long drives_length; //drives长度
-    unsigned long drives_addr; //drives地址
-    unsigned long config_table;
-    unsigned long bootloader_name; //bootloader的名字
-    unsigned long apm_table;
-    unsigned long vbe_control_info;
-    unsigned long vbe_mode_info;
-    unsigned long vbe_mode;
-    unsigned long vbe_interface_seg;
-    unsigned long vbe_interface_off;
-    unsigned long vbe_interface_len;
-    unsigned long long framebuffer_addr; //帧缓冲区地址
-    unsigned long framebuffer_pitch;
-    unsigned long framebuffer_width; //宽度（1024）
-    unsigned long framebuffer_height; //高度（768）
-    unsigned short framebuffer_bpp;
-    unsigned short framebuffer_type;
-    struct{
-        unsigned long A;
-        unsigned short B;
-    }color_info;
+    /*0*/ uint32_t flags;
+    /*4*/ uint32_t mem_lower; //低位内存
+    /*8*/ uint32_t mem_upper; //高位内存
+    /*12*/ uint32_t boot_device; //启动设备编号
+    /*16*/ uint32_t cmdline; //启动命令行地址
+    /*20*/ uint32_t mods_count; //Diasbled
+    /*24*/ uint32_t mods_addr; //Disabled
+    /*28-40*/ struct{
+        uint32_t num;
+        uint32_t size;
+        uint32_t addr;
+        uint32_t shndx;
+    }syms;
+    /*44*/ uint32_t mmap_length; //mmap长度
+    /*48*/ uint32_t mmap_addr; //mmap结构地址
+    /*52*/ uint32_t drives_length; //Disabled
+    /*56*/ uint32_t drives_addr; //Disabled
+    /*60*/ uint32_t config_table; //Disabled
+    /*64*/ uint32_t bootloader_name; //bootloader的名字
+    /*68*/ uint32_t apm_table; //Disabled
+    /*72*/ uint32_t vbe_control_info;
+    /*76*/ uint32_t vbe_mode_info;
+    /*80*/ uint16_t vbe_mode;
+    /*82*/ uint16_t vbe_interface_seg;
+    /*84*/ uint16_t vbe_interface_off;
+    /*86*/ uint16_t vbe_interface_len;
+    /*88*/ uint64_t framebuffer_addr; //帧缓冲区地址
+    /*96*/ uint32_t framebuffer_pitch;
+    /*100*/ uint32_t framebuffer_width; //宽度（1024）
+    /*104*/ uint32_t framebuffer_height; //高度（768）
+    /*108*/ uint8_t framebuffer_bpp;
+    /*109*/ uint8_t framebuffer_type;
+    /*110-115*/ struct color{
+        uint8_t framebuffer_red_field_position;
+        uint8_t framebuffer_red_mask_size;
+        uint8_t framebuffer_green_field_position;
+        uint8_t framebuffer_green_mask_size;
+        uint8_t framebuffer_blue_field_position;
+        uint8_t framebuffer_blue_mask_size;
+    } color_info;
 }multiboot_info_t;
 void __main(unsigned long magic, unsigned long addr){
     multiboot_info_t *mbi;
@@ -76,10 +66,12 @@ void __main(unsigned long magic, unsigned long addr){
             add_pool((void*)((mmap*)ptr)->base_addr, ((mmap*)ptr)->length);
         }
     }
-    //初始化设备
-    for(void* ptr = (void*)mbi->drives_addr; ptr <= (void*)mbi->drives_addr + mbi->drives_length; ptr += ((drive*)ptr)->size){
-        initDrives(ptr);
-    }
+    clear_screen((void*)mbi->framebuffer_addr, white);
+    while(1);
+    //Init fonts
+    init_ASCII_font();
+    //Display Boot Informations
+    println((void*)mbi->framebuffer_addr, "Multiboot Informations:", white, black);
     //调用主函数
     entry();
 }
