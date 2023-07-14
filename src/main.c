@@ -1,4 +1,4 @@
 #include "startup.h"
-void main(){
+void entry(){
 
 }

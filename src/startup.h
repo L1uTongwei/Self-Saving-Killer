@@ -1,6 +1,7 @@
 #include "header.h"
 #include "memory_pool.h"
 #include "drives.h"
+extern void entry();
 typedef struct{
     unsigned long tabsize;
     unsigned long strsize;
@@ -80,5 +81,5 @@ void __main(unsigned long magic, unsigned long addr){
         initDrives(ptr);
     }
     //调用主函数
-    main();
+    entry();
 }

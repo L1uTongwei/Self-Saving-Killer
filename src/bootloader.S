@@ -36,7 +36,7 @@ multiboot_entry:
     pushl %eax
 
     /* 现在进入 main 函数... */
-    call ___main
+    call __main
 
 loop:   
     hlt
