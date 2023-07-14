@@ -10,7 +10,7 @@ void init_ASCII_font(){
     ASCII_font['A'][4] = 0b00100001;
     ASCII_font['A'][5] = 0b00100001;
     // B
-    
+     
 }
 byte* get_ASCII_font(unsigned char ch){
     return ASCII_font[ch];
