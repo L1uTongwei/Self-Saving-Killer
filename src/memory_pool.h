@@ -1,5 +1,6 @@
 #pragma once
 #include "header.h"
+byte memory_pool __attribute__((section("mem_pool")));
 typedef struct pnode{
     void* last_used;
     void* end_memory;
@@ -28,5 +29,8 @@ void add_pool(void* base_addr, unsigned long length){
     }
     target->last_used = base_addr;
     target->end_memory = base_addr + length;
+}
+void init_pool(){
+    add_pool(&memory_pool, SPACE * 1024 * 1024);
 }
 #define free(x, y) add_pool(x, y)

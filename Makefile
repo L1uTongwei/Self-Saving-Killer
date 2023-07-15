@@ -1,7 +1,5 @@
 Compiler := gcc
 CompilerFlag := -fno-builtin -Og -g -m32 -nostdlib -nostartfiles -nodefaultlibs -Wno-int-to-pointer-cast
-Linker := ld
-LinkerFlag := -Ttext 0x100000 -e start -m elf_i386
 ISOFlag := -b boot/grub/stage2_eltorito.img -l -J -allow-leading-dots --no-emul-boot --boot-load-size 4 -r \
 	-copyright LICENSE -p L1uTongwei -abstract abstract.doc -V "SSK Boot CD" -input-charset iso8859-1 \
 	-boot-info-table -quiet
@@ -11,7 +9,7 @@ build: init
 	@$(Compiler) $(CompilerFlag) -c src/bootloader.S -o object/bootloader.o
 	@$(Compiler) $(CompilerFlag) -masm=intel -c src/main.c -o object/main.o
 	@echo Linking everything together...
-	@$(Linker) $(LinkerFlag) object/bootloader.o object/main.o -o object/boot/kernel
+	@ld -Tlinkfile.lds -m elf_i386
 	@echo Generating ISO Image...
 	-@rm -rf target 2> /dev/null
 	-@rm -rf dist/Self-Saving-Killer.iso 2> /dev/null

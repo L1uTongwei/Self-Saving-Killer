@@ -70,26 +70,31 @@ void __main(unsigned long magic, unsigned long addr){
     println((void*)mbi->framebuffer_addr, (char*)mbi->cmdline, white, black);
     print((void*)mbi->framebuffer_addr, "Lower Memory: ", white, black);
     put_number((void*)mbi->framebuffer_addr, mbi->mem_lower, 10, white, black);
-    println((void*)mbi->framebuffer_addr, " KB", white, black);
+    println((void*)mbi->framebuffer_addr, " Bytes", white, black);
     print((void*)mbi->framebuffer_addr, "Upper Memory: ", white, black);
-    put_number((void*)mbi->framebuffer_addr, 1048576 + mbi->mem_upper, 10, white, black);
-    println((void*)mbi->framebuffer_addr, " KB", white, black);
-    //初始化内存池
-    println((void*)mbi->framebuffer_addr, "Add Memory Address to Pool: ", red, black);
-    for(void* ptr = (void*)mbi->mmap_addr; ptr <= (void*)mbi->mmap_addr + mbi->mmap_length; ptr += ((mmap*)ptr)->size){
-        if(((mmap*)ptr)->type == 1){
-            add_pool((void*)((mmap*)ptr)->base_addr, ((mmap*)ptr)->length);
+    put_number((void*)mbi->framebuffer_addr, mbi->mem_upper, 10, white, black);
+    println((void*)mbi->framebuffer_addr, " Bytes", white, black);
+    println((void*)mbi->framebuffer_addr, "Memory Map: ", red, black);
+    for(mmap* ptr = (void*)mbi->mmap_addr; ptr <= (mmap*)(mbi->mmap_addr) + (mbi->mmap_length / sizeof(mmap)); ptr++){
+        if(ptr->type == 1){
             print((void*)mbi->framebuffer_addr, "Base Address: 0x", white, black);
-            put_number((void*)mbi->framebuffer_addr, ((mmap*)ptr)->base_addr, 16, white, black);
-            print((void*)mbi->framebuffer_addr, "        Length: ", white, black);
-            put_number((void*)mbi->framebuffer_addr, ((mmap*)ptr)->length, 10, white, black);
+            if(ptr->base_addr == 0) print((void*)mbi->framebuffer_addr, "000000", white, black);
+            put_number((void*)mbi->framebuffer_addr, ptr->base_addr, 16, white, black);
+            print((void*)mbi->framebuffer_addr, "    Length: ", white, black);
+            put_number((void*)mbi->framebuffer_addr, ptr->length, 10, white, black);
             println((void*)mbi->framebuffer_addr, " Bytes", white, black);
         }
     }
+    init_pool(); //初始化内存池
+    println((void*)mbi->framebuffer_addr, "Memory Using: ", red, black);
+    print((void*)mbi->framebuffer_addr, "Base Address: 0x", white, black);
+    put_number((void*)mbi->framebuffer_addr, (unsigned long)&memory_pool, 16, white, black);
+    print((void*)mbi->framebuffer_addr, "    Length: ", white, black);
+    put_number((void*)mbi->framebuffer_addr, SPACE, 10, white, black);
+    println((void*)mbi->framebuffer_addr, " MB", white, black);
     println((void*)mbi->framebuffer_addr, "Welcome to Self-Saving Killer!", green, black);
     println((void*)mbi->framebuffer_addr, "Author: OIer-Meet Dev Team", blue, black);
     println((void*)mbi->framebuffer_addr, "Have a good time!", red, black);
     println((void*)mbi->framebuffer_addr, "Test message: The quick brown fox jumps over the lazy dog.", green, black);
-    //调用主函数
-    entry();
+    entry(); //调用主函数
 }

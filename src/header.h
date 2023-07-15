@@ -20,6 +20,8 @@ typedef struct{
 #define green (color){0, 0xff, 0, 0}
 #define blue (color){0xff, 0, 0, 0}
 
+#define SPACE 64 // 64 MB Space
+
 /*
 short portIn(short addr){
     short ret;

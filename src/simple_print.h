@@ -43,15 +43,10 @@ void println(color* buffer, unsigned char* string, color fc, color bc){
     putchar(buffer, '\n', fc, bc);
 }
 void put_number(color* buffer, unsigned long number, unsigned long ratio, color fc, color bc){
-    if(!number){
-        putchar(buffer, '0', fc, bc);
-        return;
-    }
-    while(number){
-        unsigned char display = number % ratio;
-        if(display > 9) display += 'A';
-        else display += '0';
-        putchar(buffer, display, fc, bc);
-        number /= ratio;
-    }
+    if(!number) return;
+    put_number(buffer, number / ratio, ratio, fc, bc);
+    unsigned long display = number % ratio;
+    if(display > 9) display -= '0', display += 'A';
+    else display += '0';
+    putchar(buffer, display, fc, bc);
 }
