@@ -16,6 +16,9 @@ typedef struct{
 
 #define white (color){0xff, 0xff, 0xff, 0}
 #define black (color){0, 0, 0, 0}
+#define red (color){0, 0, 0xff, 0}
+#define green (color){0, 0xff, 0, 0}
+#define blue (color){0xff, 0, 0, 0}
 
 /*
 short portIn(short addr){

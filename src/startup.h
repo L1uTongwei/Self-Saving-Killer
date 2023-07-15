@@ -63,7 +63,7 @@ void __main(unsigned long magic, unsigned long addr){
     //Init fonts
     init_ASCII_font();
     //Display Boot Informations
-    println((void*)mbi->framebuffer_addr, "Multiboot Informations: ", white, black);
+    println((void*)mbi->framebuffer_addr, "Multiboot Informations: ", red, black);
     print((void*)mbi->framebuffer_addr, "Bootloader: ", white, black);
     println((void*)mbi->framebuffer_addr, (char*)mbi->bootloader_name, white, black);
     print((void*)mbi->framebuffer_addr, "Command Line: ", white, black);
@@ -75,7 +75,7 @@ void __main(unsigned long magic, unsigned long addr){
     put_number((void*)mbi->framebuffer_addr, 1048576 + mbi->mem_upper, 10, white, black);
     println((void*)mbi->framebuffer_addr, " KB", white, black);
     //初始化内存池
-    println((void*)mbi->framebuffer_addr, "Add Memory Address to Pool: ", white, black);
+    println((void*)mbi->framebuffer_addr, "Add Memory Address to Pool: ", red, black);
     for(void* ptr = (void*)mbi->mmap_addr; ptr <= (void*)mbi->mmap_addr + mbi->mmap_length; ptr += ((mmap*)ptr)->size){
         if(((mmap*)ptr)->type == 1){
             add_pool((void*)((mmap*)ptr)->base_addr, ((mmap*)ptr)->length);
@@ -86,10 +86,10 @@ void __main(unsigned long magic, unsigned long addr){
             println((void*)mbi->framebuffer_addr, " Bytes", white, black);
         }
     }
-    println((void*)mbi->framebuffer_addr, "Welcome to Self-Saving Killer!", white, black);
-    println((void*)mbi->framebuffer_addr, "Author: OIer-Meet Dev Team", white, black);
-    println((void*)mbi->framebuffer_addr, "Have a good time!", white, black);
-    println((void*)mbi->framebuffer_addr, "Test message: The quick brown fox jumps over the lazy dog.", white, black);
+    println((void*)mbi->framebuffer_addr, "Welcome to Self-Saving Killer!", green, black);
+    println((void*)mbi->framebuffer_addr, "Author: OIer-Meet Dev Team", blue, black);
+    println((void*)mbi->framebuffer_addr, "Have a good time!", red, black);
+    println((void*)mbi->framebuffer_addr, "Test message: The quick brown fox jumps over the lazy dog.", green, black);
     //调用主函数
     entry();
 }
