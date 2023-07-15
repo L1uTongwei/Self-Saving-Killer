@@ -17,7 +17,8 @@ typedef struct{
 #define white (color){0xff, 0xff, 0xff, 0}
 #define black (color){0, 0, 0, 0}
 
-inline short portIn(short addr){
+/*
+short portIn(short addr){
     short ret;
     __asm__ volatile(
         "in dx, al"
@@ -26,7 +27,7 @@ inline short portIn(short addr){
     );
 }
 
-inline void portOut(short addr, short value){
+void portOut(short addr, short value){
     short ret;
     __asm__ volatile(
         "out dx, al"
@@ -34,3 +35,4 @@ inline void portOut(short addr, short value){
         : "dx"(addr), "al"(value)
     );
 }
+*/
