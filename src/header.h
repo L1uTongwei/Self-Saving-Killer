@@ -6,8 +6,16 @@ typedef unsigned char           uint8_t;
 typedef unsigned short          uint16_t;
 typedef unsigned int            uint32_t;
 typedef unsigned long long      uint64_t;
-#define white (uint32_t)0x00ffffff
-#define black (uint32_t)0
+
+typedef struct{
+    uint8_t blue;
+    uint8_t green;
+    uint8_t red;
+    uint8_t reversed;
+}color;
+
+#define white (color){0xff, 0xff, 0xff, 0}
+#define black (color){0, 0, 0, 0}
 
 inline short portIn(short addr){
     short ret;

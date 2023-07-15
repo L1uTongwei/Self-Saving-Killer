@@ -66,8 +66,6 @@ void __main(unsigned long magic, unsigned long addr){
             add_pool((void*)((mmap*)ptr)->base_addr, ((mmap*)ptr)->length);
         }
     }
-    clear_screen((void*)mbi->framebuffer_addr, white);
-    while(1);
     //Init fonts
     init_ASCII_font();
     //Display Boot Informations
