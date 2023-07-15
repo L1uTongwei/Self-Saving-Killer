@@ -150,12 +150,12 @@ void init_ASCII_font(){
     ASCII_font['U'][4] = 0b00100001;
     ASCII_font['U'][5] = 0b00011110;
     // V
-    ASCII_font['U'][0] = 0b00100001;
-    ASCII_font['U'][1] = 0b00100001;
-    ASCII_font['U'][2] = 0b00100001;
-    ASCII_font['U'][3] = 0b00100001;
-    ASCII_font['U'][4] = 0b00010010;
-    ASCII_font['U'][5] = 0b00001100;
+    ASCII_font['V'][0] = 0b00100001;
+    ASCII_font['V'][1] = 0b00100001;
+    ASCII_font['V'][2] = 0b00100001;
+    ASCII_font['V'][3] = 0b00100001;
+    ASCII_font['V'][4] = 0b00010010;
+    ASCII_font['V'][5] = 0b00001100;
     // W
     ASCII_font['W'][0] = 0b00100001;
     ASCII_font['W'][1] = 0b00100001;
