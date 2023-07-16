@@ -22,7 +22,6 @@ typedef struct{
 
 #define SPACE 64 // 64 MB Space
 
-/*
 short portIn(short addr){
     short ret;
     __asm__ volatile(
@@ -40,4 +39,3 @@ void portOut(short addr, short value){
         : "dx"(addr), "al"(value)
     );
 }
-*/

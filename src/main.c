@@ -1,4 +1,4 @@
 #include "startup.h"
-void entry(){
-
+void entry(unsigned char framebuffer[768][1024]){
+    
 }

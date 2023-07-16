@@ -2,6 +2,7 @@
 #include "memory_pool.h"
 #include "ASCII_font.h"
 #include "simple_print.h"
+#include "keyboard.h"
 extern void entry();
 typedef struct{
     uint32_t size; //结构大小
@@ -96,5 +97,5 @@ void __main(unsigned long magic, unsigned long addr){
     println((void*)mbi->framebuffer_addr, "Author: OIer-Meet Dev Team", blue, black);
     println((void*)mbi->framebuffer_addr, "Have a good time!", red, black);
     println((void*)mbi->framebuffer_addr, "Test message: The quick brown fox jumps over the lazy dog.", green, black);
-    entry(); //调用主函数
+    entry((void*)mbi->framebuffer_addr); //调用主函数
 }
