@@ -46,7 +46,7 @@ void put_number(color* buffer, unsigned long number, unsigned long ratio, color 
     if(!number) return;
     put_number(buffer, number / ratio, ratio, fc, bc);
     unsigned long display = number % ratio;
-    if(display > 9) display -= '0', display += 'A';
+    if(display > 9) display -= 9, display += 'A';
     else display += '0';
     putchar(buffer, display, fc, bc);
 }
