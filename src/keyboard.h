@@ -67,11 +67,16 @@ void initKeyMap(){
 }
 key scan_keyboard(){
     portOut(0x20, 0x21);
-    byte data = portIn(0x60), is_Makekey = 0;
+    byte data = portIn(0x60), is_Makekey = 1;
     if(data >= 0x80){
-        is_Makekey = 1;
+        is_Makekey = 0;
         data -= 0x80;
     }
     if(keymap[data] == 0) return (key){data, is_Makekey};
     return (key){keymap[data], is_Makekey};
-} 
+}
+unsigned char getchar(){
+    key data;
+    while((data = scan_keyboard()).is_makeKey == 0);
+    return data.ch;
+}

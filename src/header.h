@@ -25,7 +25,7 @@ typedef struct{
 short portIn(short addr){
     short ret;
     __asm__ volatile(
-        "in dx, al"
+        "in al, dx"
         : "=al"(ret)
         : "dx"(addr)
     );

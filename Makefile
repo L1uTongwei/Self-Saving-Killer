@@ -1,5 +1,5 @@
 Compiler := gcc
-CompilerFlag := -fno-builtin -Og -g -m32 -nostdlib -nostartfiles -nodefaultlibs -Wno-int-to-pointer-cast
+CompilerFlag := -fno-builtin -Og -g -m32 -nostdlib -nostartfiles -nodefaultlibs -Wno-int-to-pointer-cast -Wno-incompatible-pointer-types
 ISOFlag := -b boot/grub/stage2_eltorito.img -l -J -allow-leading-dots --no-emul-boot --boot-load-size 4 -r \
 	-copyright LICENSE -p L1uTongwei -abstract abstract.doc -V "SSK Boot CD" -input-charset iso8859-1 \
 	-boot-info-table -quiet

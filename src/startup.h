@@ -97,5 +97,7 @@ void __main(unsigned long magic, unsigned long addr){
     println((void*)mbi->framebuffer_addr, "Author: OIer-Meet Dev Team", blue, black);
     println((void*)mbi->framebuffer_addr, "Have a good time!", red, black);
     println((void*)mbi->framebuffer_addr, "Test message: The quick brown fox jumps over the lazy dog.", green, black);
+    println((void*)mbi->framebuffer_addr, "Press any key to continue...", green, black);
+    getchar();
     entry((void*)mbi->framebuffer_addr); //调用主函数
 }
