@@ -1,10 +1,12 @@
 #include "startup.h"
 void entry(unsigned char framebuffer[768][1024]){
     clear_screen(framebuffer, blue);
-    byte* disk_buffer = malloc(512);
-    readSectors(disk_buffer, 0, 1);
+    byte* buf = init_BPB();
     for(int i = 0; i < 512; i++){
-        putchar(framebuffer, disk_buffer[i], white, blue);
+        if(buf[i] == 0) print(framebuffer, "00", white, blue);
+        else if(buf[i] < 0x10) putchar(framebuffer, '0', white, blue);
+        put_number(framebuffer, buf[i], 16, white, blue);
+        if(i % 16 == 0) putchar(framebuffer, '\n', white, blue);
+        else putchar(framebuffer, ' ', white, blue);
     }
-    free(disk_buffer, 512);
 }

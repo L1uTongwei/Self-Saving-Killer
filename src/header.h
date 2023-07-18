@@ -22,30 +22,30 @@ typedef struct{
 
 #define SPACE 64 // 64 MB Space
 
-uint8_t portIn(short addr){
+__attribute__((stdcall)) uint8_t portIn(uint16_t addr){
     uint8_t ret;
     asm volatile(
-        "in al, dx \n\t"
-        : "=a"(ret)
-        : "d"(addr)
+        "in %[port], %[value] \n\t"
+        : [value]"=r"(ret)
+        : [port]"Nd"(addr)
     );
     return ret;
 }
 
-uint16_t portIn16(short addr){
+__attribute__((stdcall)) uint16_t portIn16(uint16_t addr){
     uint16_t ret;
     asm volatile(
-        "in ax, dx \n\t"
-        : "=a"(ret)
-        : "d"(addr)
+        "in %[port], %[value] \n\t"
+        : [value]"=r"(ret)
+        : [port]"Nd"(addr)
     );
     return ret;
 }
 
-void portOut(short addr, short value){
+__attribute__((stdcall)) void portOut(uint16_t addr, short value){
     asm volatile(
-        "out dx, al \n\t"
+        "out %[value], %[port] \n\t"
         :
-        : "d"(addr), "a"(value)
+        : [port]"Nd"(addr), [value]"r"(value)
     );
 }

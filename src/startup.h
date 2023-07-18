@@ -4,6 +4,7 @@
 #include "simple_print.h"
 #include "keyboard.h"
 #include "drive.h"
+#include "filesystem.h"
 extern void entry();
 typedef struct{
     uint32_t size; //结构大小

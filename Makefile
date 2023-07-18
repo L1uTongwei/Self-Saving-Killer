@@ -6,11 +6,9 @@ XLOOP := $(subst /dev/,,$(LOOP))
 build: init
 	@echo "\033[1;32mBuilding bootloader and main program...\033[0m"
 	$(Compiler) $(CompilerFlag) -c src/bootloader.S -o object/bootloader.o
-	$(Compiler) $(CompilerFlag) -masm=intel -c src/main.c -o object/main.o
-	
+	$(Compiler) $(CompilerFlag) -c src/main.c -o object/main.o
 	@echo "\033[1;32mLinking everything together...\033[0m"
 	ld -Tlinkfile.lds -m elf_i386
-
 	@echo "\033[1;32mGenerating Game Image...\033[0m"
 	-@rm -rf target 2> /dev/null
 	-@rm -rf dist/Self-Saving-Killer.iso 2> /dev/null
@@ -23,9 +21,9 @@ build: init
 	@echo "n\n\n\n\n\nw\n" | fdisk dist/Self-Saving-Killer.raw
 	losetup $(LOOP) dist/Self-Saving-Killer.raw
 	kpartx -av $(LOOP)
-	mkfs -t ext4 /dev/mapper/$(XLOOP)p1
+	mkfs -t vfat -F 16 /dev/mapper/$(XLOOP)p1 
 	-mkdir /tmp/image_install
-	mount /dev/mapper/$(XLOOP)p1 /tmp/image_install
+	mount /dev/mapper/$(XLOOP)p1 /tmp/image_install -o iocharset=utf8
 	@cp -rf target/* /tmp/image_install/
 	grub-install --target=i386-pc --no-floppy --recheck --root-directory=/tmp/image_install $(LOOP)
 	umount /tmp/image_install
