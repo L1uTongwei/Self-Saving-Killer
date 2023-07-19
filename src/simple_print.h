@@ -1,7 +1,7 @@
 #pragma once
 #include "ASCII_font.h"
 int pos_x = 0, pos_y = 0; //text position
-inline uint16_t getBit(uint16_t number, uint16_t offset){
+uint16_t getBit(uint16_t number, uint16_t offset){
     return (number >> (16 - offset)) & 1; 
 }
 void clear_screen(color* buffer, color bc){

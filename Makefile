@@ -6,7 +6,7 @@ XLOOP := $(subst /dev/,,$(LOOP))
 build: init
 	@echo "\033[1;32mBuilding bootloader and main program...\033[0m"
 	$(Compiler) $(CompilerFlag) -c src/bootloader.S -o object/bootloader.o
-	$(Compiler) $(CompilerFlag) -c src/main.c -o object/main.o
+	$(Compiler) $(CompilerFlag) -masm=intel -c src/main.c -o object/main.o
 	@echo "\033[1;32mLinking everything together...\033[0m"
 	ld -Tlinkfile.lds -m elf_i386
 	@echo "\033[1;32mGenerating Game Image...\033[0m"
@@ -16,10 +16,10 @@ build: init
 	@cp -rf assets/* target/
 	@cp -rf object/boot target/
 	@cp -rf LICENSE target/
-	@rm -f dist/Self-Saving-Killer.raw 
-	dd if=/dev/zero of=dist/Self-Saving-Killer.raw bs=1M count=128
-	@echo "n\n\n\n\n\nw\n" | fdisk dist/Self-Saving-Killer.raw
-	losetup $(LOOP) dist/Self-Saving-Killer.raw
+	@rm -f dist/Self-Saving-Killer.img 
+	dd if=/dev/zero of=dist/Self-Saving-Killer.img bs=128M count=1
+	@echo "n\n\n\n\n\nw\n" | fdisk dist/Self-Saving-Killer.img
+	losetup $(LOOP) dist/Self-Saving-Killer.img
 	kpartx -av $(LOOP)
 	mkfs -t vfat -F 16 /dev/mapper/$(XLOOP)p1 
 	-mkdir /tmp/image_install
@@ -29,16 +29,16 @@ build: init
 	umount /tmp/image_install
 	-@rm -rf /tmp/image_install
 	losetup -d $(LOOP)
-	qemu-img convert -f raw dist/Self-Saving-Killer.raw -O vdi dist/Self-Saving-Killer.vdi
-	qemu-img convert -f raw dist/Self-Saving-Killer.raw -O vhdx dist/Self-Saving-Killer.vhdx
-	qemu-img convert -f raw dist/Self-Saving-Killer.raw -O vmdk dist/Self-Saving-Killer.vmdk
+	qemu-img convert -f raw dist/Self-Saving-Killer.img -O vdi dist/Self-Saving-Killer.vdi
+	qemu-img convert -f raw dist/Self-Saving-Killer.img -O vhdx dist/Self-Saving-Killer.vhdx
+	qemu-img convert -f raw dist/Self-Saving-Killer.img -O vmdk dist/Self-Saving-Killer.vmdk
 run:
 	@echo "\033[1;32mStrating qemu virtual machine...\033[0m"
-	qemu-system-i386 -drive format=raw,file=dist/Self-Saving-Killer.raw -serial null -parallel stdio
+	qemu-system-i386 -drive format=raw,file=dist/Self-Saving-Killer.img -serial null -parallel stdio
 debug:
 	@echo "\033[1;32mStrating qemu virtual machine and GDB Debugger...\033[0m"
-	qemu-system-i386 -drive format=raw,file=dist/Self-Saving-Killer.raw -serial null -parallel stdio -s -S &
-	gdb -ex "target remote :1234" -ex "symbol-file object/boot/kernel" -ex "b __main" -ex "c"
+	qemu-system-i386 -drive format=raw,file=dist/Self-Saving-Killer.img -serial null -parallel stdio -s -S &
+	gdb -ex "target remote :1234" -ex "symbol-file object/boot/kernel" -ex "set disassembly-flavor intel" -ex "b __main" -ex "c" -q
 	killall qemu-system-i386
 init:
 	-@mkdir -p object/boot 2> /dev/null || exit 0

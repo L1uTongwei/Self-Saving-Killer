@@ -3,7 +3,6 @@
 #include "ASCII_font.h"
 #include "simple_print.h"
 #include "keyboard.h"
-#include "drive.h"
 #include "filesystem.h"
 extern void entry();
 typedef struct{
@@ -92,7 +91,7 @@ void __main(unsigned long magic, unsigned long addr){
     init_pool(); //初始化内存池
     println((void*)mbi->framebuffer_addr, "Memory Using: ", red, blue);
     print((void*)mbi->framebuffer_addr, "Base Address: 0x", white, blue);
-    put_number((void*)mbi->framebuffer_addr, (unsigned long)&memory_pool, 16, white, blue);
+    put_number((void*)mbi->framebuffer_addr, (unsigned long)(memory_pool + 0x400), 16, white, blue);
     print((void*)mbi->framebuffer_addr, "    Length: ", white, blue);
     put_number((void*)mbi->framebuffer_addr, SPACE, 10, white, blue);
     println((void*)mbi->framebuffer_addr, " MB", white, blue);

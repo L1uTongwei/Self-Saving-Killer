@@ -22,30 +22,39 @@ typedef struct{
 
 #define SPACE 64 // 64 MB Space
 
-__attribute__((stdcall)) uint8_t portIn(uint16_t addr){
-    uint8_t ret;
+#define nop() asm volatile("mov %ax, %ax")
+#define delay(x) asm volatile( \
+    "delayLoop%=: \n\t" \
+    "\t  nop \n\t" \
+    "loop delayLoop%= \n\t" \
+    :: "c"(x) \
+)
+
+__attribute__((optimize("O2"), stdcall)) uint8_t portIn(uint16_t addr){
+    uint8_t ret = 0;
     asm volatile(
-        "in %[port], %[value] \n\t"
-        : [value]"=r"(ret)
+        "in %[value], %[port]\n\t"
+        : [value]"+&a"(ret)
         : [port]"Nd"(addr)
     );
     return ret;
 }
-
-__attribute__((stdcall)) uint16_t portIn16(uint16_t addr){
-    uint16_t ret;
+__attribute__((optimize("O2"), stdcall)) void portOut(uint16_t addr, short value){
     asm volatile(
-        "in %[port], %[value] \n\t"
-        : [value]"=r"(ret)
-        : [port]"Nd"(addr)
+        "out %[port], %[value]\n\t"
+        :: [port]"Nd"(addr), [value]"a"(value)
+    );
+}
+__attribute__((optimize("O2"), stdcall)) void memcpy(byte* dest, byte* source, uint32_t size){
+    for(int i = 0; i < size; i++){
+        dest[i] = source[i];
+    }
+}
+__attribute__((optimize("O2"), stdcall)) uint32_t getESP(){
+    uint32_t ret = 0;
+    asm volatile(
+        "mov %[ret], esp\n\t"
+        : [ret]"+&g"(ret)
     );
     return ret;
-}
-
-__attribute__((stdcall)) void portOut(uint16_t addr, short value){
-    asm volatile(
-        "out %[value], %[port] \n\t"
-        :
-        : [port]"Nd"(addr), [value]"r"(value)
-    );
 }

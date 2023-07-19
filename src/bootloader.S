@@ -1,6 +1,6 @@
 #define MULTIBOOT_HEADER_MAGIC          0x1BADB002
 #define MULTIBOOT_HEADER_FLAGS          0x00000007
-#define STACK_SIZE                      0x40000
+#define STACK_SIZE                      0x400
 
 .text
     .globl  start, _start
