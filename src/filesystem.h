@@ -149,11 +149,16 @@ contents_node_t* find_file(char* filename, char* suffix){ //目前只支持读�
 }
 
 void readFile(void* buffer, contents_node_t* contents){
-    uint32_t sector_number = contents->length / (BPB->bytes_per_sector * BPB->sector_per_cluster);
-    if(contents->length % (BPB->bytes_per_sector * BPB->sector_per_cluster)) sector_number += BPB->sector_per_cluster;
-    uint32_t start_sector = contents->cluster * BPB->sector_per_cluster;
-    byte* buf = malloc(sector_number * BPB->bytes_per_sector);
-    readSectors(buf, start_sector, sector_number);
-    memcpy(buffer, buf, contents->length);
-    free(buf, sector_number * BPB->bytes_per_sector);
+    uint32_t cluster = contents->cluster;
+    uint32_t length = contents->length;
+    while(FAT[cluster] < 0xFFF8){
+        readSectors(buffer, cluster * BPB->sector_per_cluster, BPB->sector_per_cluster);
+        buffer += BPB->sector_per_cluster * BPB->bytes_per_sector;
+        length -= BPB->sector_per_cluster * BPB->bytes_per_sector;
+        cluster++;
+    }
+    byte* buf = malloc(BPB->sector_per_cluster * BPB->bytes_per_sector);
+    readSectors(buf, cluster * BPB->sector_per_cluster, BPB->sector_per_cluster);
+    memcpy(buffer, buf, length);
+    free(buf, BPB->sector_per_cluster * BPB->bytes_per_sector);
 }
