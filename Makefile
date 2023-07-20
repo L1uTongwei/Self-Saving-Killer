@@ -27,8 +27,8 @@ build: init
 	@cp -rf target/* /tmp/image_install/
 	grub-install --target=i386-pc --no-floppy --recheck --root-directory=/tmp/image_install $(LOOP)
 	umount /tmp/image_install
-	-@rm -rf /tmp/image_install
 	losetup -d $(LOOP)
+	-@rm -rf /tmp/image_install
 	qemu-img convert -f raw dist/Self-Saving-Killer.img -O vdi dist/Self-Saving-Killer.vdi
 	qemu-img convert -f raw dist/Self-Saving-Killer.img -O vhdx dist/Self-Saving-Killer.vhdx
 	qemu-img convert -f raw dist/Self-Saving-Killer.img -O vmdk dist/Self-Saving-Killer.vmdk
