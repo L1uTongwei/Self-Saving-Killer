@@ -30,7 +30,7 @@ typedef struct{
     :: "c"(x) \
 )
 
-__attribute__((optimize("O2"), stdcall)) uint8_t portIn(uint16_t addr){
+ uint8_t portIn(uint16_t addr){
     uint8_t ret = 0;
     asm volatile(
         "in %[value], %[port]\n\t"
@@ -39,18 +39,42 @@ __attribute__((optimize("O2"), stdcall)) uint8_t portIn(uint16_t addr){
     );
     return ret;
 }
-__attribute__((optimize("O2"), stdcall)) void portOut(uint16_t addr, short value){
+ void portOut(uint16_t addr, short value){
     asm volatile(
         "out %[port], %[value]\n\t"
         :: [port]"Nd"(addr), [value]"a"(value)
     );
 }
-__attribute__((optimize("O2"), stdcall)) void memcpy(byte* dest, byte* source, uint32_t size){
+void memcpy(byte* dest, byte* source, uint32_t size){
     for(int i = 0; i < size; i++){
         dest[i] = source[i];
     }
 }
-__attribute__((optimize("O2"), stdcall)) uint32_t getESP(){
+byte memcmp(byte* dest, byte* src, uint32_t size){
+    for(int i = 0; i < size; i++){
+        if(dest[i] != src[i]) return 1;
+    }
+    return 0;
+}
+ void memset(byte* dest, byte value, uint32_t size){
+    for(int i = 0; i < size; i++){
+        dest[i] = value;
+    }
+}
+byte strcmp(char* dest, char* src){
+    while(*dest != '\0' && *src != '\0'){
+        if(*dest != *src) return 1;
+    }
+    if(*src != *dest) return 1;
+    return 0;
+}
+byte strcmp_s(char* dest, char* src, byte len){
+    for(int i = 0; i < len; i++){
+        if(dest[i] != src[i]) return 1;
+    }
+    return 0;
+}
+ uint32_t getESP(){
     uint32_t ret = 0;
     asm volatile(
         "mov %[ret], esp\n\t"

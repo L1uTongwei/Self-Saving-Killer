@@ -50,7 +50,6 @@ typedef struct{
     uint16_t edit_date;
     uint16_t cluster;
     uint32_t length;
-    struct contents_t* next;
 } contents_t;
 
 void readSector(uint16_t* buffer, uint32_t sector){
@@ -121,17 +120,30 @@ byte init_Disk(){
     contents_node_t* iterator = &contents_head;
     contents_t* pointer = contents_buffer;
     uint32_t sector = 0xA04;
+    contents_t *empty_struct = malloc(sizeof(contents_t));
+    memset(empty_struct, 0, sizeof(contents_t));
     do{
         readSector(contents_buffer, sector);
         pointer = contents_buffer;
-        while((byte*)pointer <= contents_buffer + 0x200 && *((uint32_t*)pointer) != 0){
+        while((byte*)pointer <= contents_buffer + 0x200 && memcmp(pointer, empty_struct, sizeof(contents_t))){
             while(iterator->next != nullptr) iterator = iterator->next;
-            memcpy((void*)iterator, (void*)pointer, 32);
+            memcpy(iterator, pointer, 32);
             iterator->next = malloc(sizeof(contents_node_t));
             (iterator->next)->next = nullptr;
-            pointer++;
+            pointer += 2;
         }
         sector++;
     }while((byte*)pointer > contents_buffer + 0x200);
     return 0;
+}
+
+contents_node_t* find_file(char* filename, char* suffix){ //目前只支持读取根目录下的文件
+    contents_node_t* iterator = &contents_head;
+    while(iterator->next != nullptr){
+        if(!strcmp_s(iterator->filename, filename, 8) && !strcmp_s(iterator->suffix, filename, 3)){
+            return iterator;
+        }
+        iterator = iterator->next;
+    }
+    return nullptr;
 }
