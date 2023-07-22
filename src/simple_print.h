@@ -50,3 +50,12 @@ void put_number(color* buffer, unsigned long number, unsigned long ratio, color 
     else display += '0';
     putchar(buffer, display, fc, bc);
 }
+void highlight(color* buffer, int line, color a, color b){
+    for(int y = line * 16; y < (line + 1) * 16; y++){
+        for(int x = 0; x < 1024; x++){
+            if(!memcmp(&buffer[y * 1024 + x], &a, sizeof(color))){
+                buffer[y * 1024 + x] = b;
+            }
+        }
+    }
+}

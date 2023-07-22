@@ -1,6 +1,9 @@
 #pragma once
 #include "header.h"
 
+//文件系统读取
+//目前只能读取根目录下的文件
+
 struct{
     uint16_t bytes_per_sector; //只支持 512 字节哦~
     uint8_t sector_per_cluster; //每簇的扇区数
@@ -109,7 +112,7 @@ byte init_Disk(){
         根目录：0x40800（0xA04 号扇区）
     */
     byte *DMR_buffer = malloc(0x200), *FAT_buffer = malloc(0x20000), *contents_buffer = malloc(0x200);
-    readSectors(DMR_buffer, 0x800, 1);
+    readSector(DMR_buffer, 0x800);
     readSectors(FAT_buffer, 0x804, 0x100);
     if(DMR_buffer[0x1FE] != 0x55 || DMR_buffer[0x1FF] != 0xAA){
         return 1;
@@ -140,7 +143,7 @@ byte init_Disk(){
 contents_node_t* find_file(char* filename, char* suffix){ //目前只支持读取根目录下的文件
     contents_node_t* iterator = &contents_head;
     while(iterator->next != nullptr){
-        if(!strcmp_s(iterator->filename, filename, 8) && !strcmp_s(iterator->suffix, filename, 3)){
+        if(!strcmp_s(iterator->filename, filename, 8) && !strcmp_s(iterator->suffix, suffix, 3)){
             return iterator;
         }
         iterator = iterator->next;
@@ -155,7 +158,7 @@ void readFile(void* buffer, contents_node_t* contents){
         readSectors(buffer, cluster * BPB->sector_per_cluster, BPB->sector_per_cluster);
         buffer += BPB->sector_per_cluster * BPB->bytes_per_sector;
         length -= BPB->sector_per_cluster * BPB->bytes_per_sector;
-        cluster++;
+        cluster = FAT[cluster];
     }
     byte* buf = malloc(BPB->sector_per_cluster * BPB->bytes_per_sector);
     readSectors(buf, cluster * BPB->sector_per_cluster, BPB->sector_per_cluster);

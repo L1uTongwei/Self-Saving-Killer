@@ -1,5 +1,7 @@
 #pragma once
 
+#define VERSION "1.0"
+
 #define nullptr (void*) 0
 typedef unsigned char           byte;
 typedef unsigned char           uint8_t;
@@ -81,4 +83,8 @@ uint32_t getESP(){
         : [ret]"+&g"(ret)
     );
     return ret;
+}
+uint32_t abs(long n){
+    if(n < 0) return -n;
+    return n;
 }

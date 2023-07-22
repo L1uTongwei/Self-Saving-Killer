@@ -24,7 +24,7 @@ build: init
 	mkfs -t vfat -F 16 /dev/mapper/$(XLOOP)p1 
 	-mkdir /tmp/image_install
 	mount /dev/mapper/$(XLOOP)p1 /tmp/image_install -o iocharset=utf8
-	@cp -rf target/* /tmp/image_install/
+	cp -rf target/* /tmp/image_install/
 	grub-install --target=i386-pc --no-floppy --recheck --root-directory=/tmp/image_install $(LOOP)
 	umount /tmp/image_install
 	losetup -d $(LOOP)
@@ -38,7 +38,7 @@ run:
 debug:
 	@echo "\033[1;32mStrating qemu virtual machine and GDB Debugger...\033[0m"
 	qemu-system-i386 -drive format=raw,file=dist/Self-Saving-Killer.img -serial null -parallel stdio -s -S &
-	gdb -ex "target remote :1234" -ex "symbol-file object/boot/kernel" -ex "set disassembly-flavor intel" -ex "b __main" -ex "c" -q
+	gdb -ex "target remote :1234" -ex "symbol-file object/boot/kernel" -ex "set disassembly-flavor intel" -ex "b entry" -ex "c" -q
 	killall qemu-system-i386
 init:
 	-@mkdir -p object/boot 2> /dev/null || exit 0

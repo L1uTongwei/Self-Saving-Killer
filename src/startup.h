@@ -62,44 +62,7 @@ typedef struct{
 void __main(unsigned long magic, unsigned long addr){
     multiboot_info_t *mbi;
     mbi = (multiboot_info_t*)addr;
-    //Init fonts
+    init_pool();
     init_ASCII_font();
-    //Display Boot Informations
-    clear_screen((void*)mbi->framebuffer_addr, blue);
-    println((void*)mbi->framebuffer_addr, "Multiboot Informations: ", red, blue);
-    print((void*)mbi->framebuffer_addr, "Bootloader: ", white, blue);
-    println((void*)mbi->framebuffer_addr, (char*)mbi->bootloader_name, white, blue);
-    print((void*)mbi->framebuffer_addr, "Command Line: ", white, blue);
-    println((void*)mbi->framebuffer_addr, (char*)mbi->cmdline, white, blue);
-    print((void*)mbi->framebuffer_addr, "Lower Memory: ", white, blue);
-    put_number((void*)mbi->framebuffer_addr, mbi->mem_lower, 10, white, blue);
-    println((void*)mbi->framebuffer_addr, " Bytes", white, blue);
-    print((void*)mbi->framebuffer_addr, "Upper Memory: ", white, blue);
-    put_number((void*)mbi->framebuffer_addr, mbi->mem_upper, 10, white, blue);
-    println((void*)mbi->framebuffer_addr, " Bytes", white, blue);
-    println((void*)mbi->framebuffer_addr, "Memory Map: ", red, blue);
-    for(mmap* ptr = (void*)mbi->mmap_addr; ptr <= (mmap*)(mbi->mmap_addr) + (mbi->mmap_length / sizeof(mmap)); ptr++){
-        if(ptr->type == 1){
-            print((void*)mbi->framebuffer_addr, "Base Address: 0x", white, blue);
-            if(ptr->base_addr == 0) print((void*)mbi->framebuffer_addr, "000000", white, blue);
-            put_number((void*)mbi->framebuffer_addr, ptr->base_addr, 16, white, blue);
-            print((void*)mbi->framebuffer_addr, "    Length: ", white, blue);
-            put_number((void*)mbi->framebuffer_addr, ptr->length, 10, white, blue);
-            println((void*)mbi->framebuffer_addr, " Bytes", white, blue);
-        }
-    }
-    init_pool(); //初始化内存池
-    println((void*)mbi->framebuffer_addr, "Memory Using: ", red, blue);
-    print((void*)mbi->framebuffer_addr, "Base Address: 0x", white, blue);
-    put_number((void*)mbi->framebuffer_addr, (unsigned long)(memory_pool + 0x400), 16, white, blue);
-    print((void*)mbi->framebuffer_addr, "    Length: ", white, blue);
-    put_number((void*)mbi->framebuffer_addr, SPACE, 10, white, blue);
-    println((void*)mbi->framebuffer_addr, " MB", white, blue);
-    println((void*)mbi->framebuffer_addr, "Welcome to Self-Saving Killer!", green, blue);
-    println((void*)mbi->framebuffer_addr, "Author: OIer-Meet Dev Team", blue, blue);
-    println((void*)mbi->framebuffer_addr, "Have a good time!", red, blue);
-    println((void*)mbi->framebuffer_addr, "Test message: The quick brown fox jumps over the lazy dog.", green, blue);
-    println((void*)mbi->framebuffer_addr, "Press any key to continue...", red, blue);
-    getchar();
     entry((void*)mbi->framebuffer_addr); //调用主函数
 }
