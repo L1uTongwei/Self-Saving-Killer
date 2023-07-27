@@ -70,25 +70,25 @@ void readSector(uint16_t* buffer, uint32_t sector){
         "and eax, 0x0F \n\t"
         "or  eax, 0xE0 \n\t"
         "out dx, al \n\t" //0x1f6
-        "mov al, 1 \n\t"
-        "mov dx, 0x1f2 \n\t"
+        "mov eax, 1 \n\t"
+        "mov edx, 0x1f2 \n\t"
         "out dx, al \n\t" //0x1f2
-        "mov dx, 0x1f7 \n\t"
-        "mov al, 0x20 \n\t"
+        "mov edx, 0x1f7 \n\t"
+        "mov eax, 0x20 \n\t"
         "out dx, al \n\t" //0x1f7
         :: "a"(sector)
         : "edx"
     );
     asm volatile(
-        "mov dx, 0x1f7 \n\t"
+        "mov edx, 0x1f7 \n\t"
         "waitLoop: \n\t"
         "    nop \n\t"
         "    in al, dx \n\t"
         "    and al, 0x88 \n\t"
         "    cmp al, 0x08 \n\t"
         "    jnz waitLoop \n\t"
-        "mov dx, 0x1f0 \n\t"
-        "mov cx, 256 \n\t"
+        "mov edx, 0x1f0 \n\t"
+        "mov ecx, 256 \n\t"
         "readLoop: \n\t"
         "    in ax, dx \n\t"
         "    mov [%[addr]], ax \n\t"

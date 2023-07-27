@@ -31,7 +31,7 @@ void add_pool(void* base_addr, unsigned long length){
     target->end_memory = base_addr + length;
 }
 void init_pool(){
-    memory_pool = (void*)getESP();
-    add_pool(memory_pool + 0x400, SPACE * 1024 * 1024);
+    memory_pool = getESP();
+    add_pool(memory_pool + 0x10000, SPACE * 1024 * 1024);
 }
 #define free(x, y) add_pool(x, y)
