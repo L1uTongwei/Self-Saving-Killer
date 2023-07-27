@@ -4,10 +4,10 @@ LOOP := $(shell losetup -f)
 XLOOP := $(subst /dev/,,$(LOOP))
 .PHONY: init clean build run
 build: init
-	@echo "\033[1;32mBuilding bootloader and main program...\033[0m"
+	@echo "\033[1;32mBuilding bootloader and main program\033[0m"
 	$(Compiler) $(CompilerFlag) -c src/bootloader.S -o object/bootloader.o
 	$(Compiler) $(CompilerFlag) -masm=intel -c src/main.c -o object/main.o
-	@echo "\033[1;32mLinking everything together...\033[0m"
+	@echo "\033[1;32mLinking everything together\033[0m"
 	ld -Tlinkfile.lds -m elf_i386
 	@echo "\033[1;32mGenerating Game Package\033[0m"
 	#node SSKgenerater/SSKgenerater.js demo/jail object/jail.ssk SSKgenerater/simsun.ttc
@@ -35,10 +35,10 @@ build: init
 	qemu-img convert -f raw dist/Self-Saving-Killer.img -O vhdx dist/Self-Saving-Killer.vhdx
 	qemu-img convert -f raw dist/Self-Saving-Killer.img -O vmdk dist/Self-Saving-Killer.vmdk
 run:
-	@echo "\033[1;32mStrating qemu virtual machine...\033[0m"
+	@echo "\033[1;32mStrating qemu virtual machine\033[0m"
 	qemu-system-i386 -drive format=raw,file=dist/Self-Saving-Killer.img -serial null -parallel stdio
 debug:
-	@echo "\033[1;32mStrating qemu virtual machine and GDB Debugger...\033[0m"
+	@echo "\033[1;32mStrating qemu virtual machine and GDB Debugger\033[0m"
 	qemu-system-i386 -drive format=raw,file=dist/Self-Saving-Killer.img -serial null -parallel stdio -s -S &
 	gdb -ex "target remote :1234" -ex "symbol-file object/boot/kernel" -ex "set disassembly-flavor intel" -ex "b entry" -ex "c" -q
 	killall qemu-system-i386
