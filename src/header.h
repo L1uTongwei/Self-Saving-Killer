@@ -22,7 +22,7 @@ typedef struct{
 #define green (color){0, 0xff, 0, 0}
 #define blue (color){0xff, 0, 0, 0}
 
-#define SPACE 64 // 64 MB Space
+#define SPACE 512 // 512 MB Space
 
 #define nop() asm volatile("mov %ax, %ax")
 #define delay(x) asm volatile( \

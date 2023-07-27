@@ -1,0 +1,10 @@
+{
+    "music": [
+        {"scaryBeep": "music/bgm01.wav"},
+        {"peaceFM": "music/bgm02.wav"},
+        {"etherealFM": "music/bgm03.wav"}
+    ],
+    "image": [
+        
+    ]
+}

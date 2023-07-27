@@ -1,4 +1,4 @@
-#include "startup.h"
+#include "system/startup.h"
 void entry(color framebuffer[768][1024]){
     byte findFlag = 0, gameCnt = 0;
     clear_screen(framebuffer, black);

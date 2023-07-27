@@ -1,0 +1,11 @@
+{
+  "name": "ssk-generater",
+  "version": "1.0.0",
+  "description": "",
+  "main": "SSKgenerater.js",
+  "author": "OIer-Meet Dev Team",
+  "license": "LGPL-3.0",
+  "dependencies": {
+    "opentype.js": "^1.3.4"
+  }
+}
