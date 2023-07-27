@@ -11,7 +11,7 @@ build: init
 	ld -Tlinkfile.lds -m elf_i386
 	@echo "\033[1;32mGenerating Game Package\033[0m"
 	#node SSKgenerater/SSKgenerater.js demo/jail object/jail.ssk SSKgenerater/simsun.ttc
-	@echo "\033[1;32mGenerating Game Image...\033[0m"
+	@echo "\033[1;32mGenerating Game Image\033[0m"
 	-@rm -rf target 2> /dev/null
 	-@rm -rf dist/Self-Saving-Killer.iso 2> /dev/null
 	-@mkdir target 2> /dev/null
