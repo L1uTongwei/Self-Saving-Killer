@@ -3,3 +3,4 @@ object/
 .vscode
 target/
 SSKgenerater/node_modules
+logs/
